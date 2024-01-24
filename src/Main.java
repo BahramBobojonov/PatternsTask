@@ -1,15 +1,39 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import factory.CosmeticProductFactory;
+import factory.DefaultCosmeticProductFactory;
+import model.CosmeticProduct;
+import observer.CosmeticWarehouse;
+import observer.StockObserver;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        CosmeticWarehouse warehouse = new CosmeticWarehouse();
+        StockObserver observer1 = new StockObserver("Observer 1");
+        StockObserver observer2 = new StockObserver("Observer 2");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        warehouse.addObserver(observer1);
+        warehouse.addObserver(observer2);
+
+        CosmeticProductFactory productFactory = new DefaultCosmeticProductFactory();
+
+        CosmeticProduct lipstick = productFactory.createCosmeticProduct("Lipstick", 50);
+        CosmeticProduct mascara = productFactory.createCosmeticProduct("Mascara", 30);
+
+        warehouse.addProduct(lipstick);
+        warehouse.addProduct(mascara);
+
+        printProductInfo(warehouse);
+
+        warehouse.updateStockLevel(lipstick, 40);
+        warehouse.updateStockLevel(mascara, 20);
+
+        printProductInfo(warehouse);
+    }
+
+    private static void printProductInfo(CosmeticWarehouse warehouse) {
+        System.out.println("Current Products in Warehouse:");
+        for (CosmeticProduct product : warehouse.getProducts()) {
+            System.out.println(product.getName() + ": Stock Level - " + product.getStockLevel());
         }
+        System.out.println();
     }
 }
